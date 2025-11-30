@@ -1,0 +1,7 @@
+<h1>Businesses</h1>
+
+<% @businesses.each do |business| %>
+  <p>
+    <%= link_to business.name, business %>
+  </p>
+<% end %>

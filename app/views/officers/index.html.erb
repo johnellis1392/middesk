@@ -1,0 +1,7 @@
+<h1>Officers</h1>
+
+<% @officers.each do |officer| %>
+  <p>
+    <%= link_to officer.name, officer %>
+  </p>
+<% end %>
