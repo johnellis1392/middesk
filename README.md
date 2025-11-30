@@ -5,8 +5,8 @@ assessment for the software engineer interview track. I wrote
 two separate solutions with their own trade-offs that can be found
 on the corresponding branches of this repository:
 
-- [`main`: My first solution](https://github.com/johnellis1392/middesk)
-- [`alternative`: My second solution](https://github.com/johnellis1392/middesk)
+- [`main`: My first solution](https://github.com/johnellis1392/middesk/tree/main)
+- [`alternative`: My second solution](https://github.com/johnellis1392/middesk/tree/alternative)
 
 The `README.md` on the `alternative` branch has a more thorough walkthrough
 of the alternative approach (which may be the better approach, to be honest),
