@@ -1,51 +1,82 @@
-# Alternative Solution
+# Main Solution
 
-While the solution on the main branch is robust, I realized while implementing
-it that I could easily memoize much of the data links, and negate the need
-for the `Association` model, by changing the data structure to be more linear.
-My new approach looks like this:
+This is my repository for the business verification API project
+assessment for the software engineer interview track. I wrote
+two separate solutions with their own trade-offs that can be found
+on the corresponding branches of this repository:
 
+- [`main`: My first solution](https://github.com/johnellis1392/middesk)
+- [`alternative`: My second solution](https://github.com/johnellis1392/middesk)
+
+The `README.md` on the `alternative` branch has a more thorough walkthrough
+of the alternative approach (which may be the better approach, to be honest),
+but I'll explain the primary approach here.
+
+I ran into some issues when solving this problem in the interview because `sqlc`, the SQL
+ORM code-generator I used along with Go to build my solution, didn't create
+auto-incrementing columns by default. As well, there were a few other minor technical
+hangups that prevented me from making sufficient progress. I decided to try
+Ruby-on-Rails for this approach to more easily define the database in a
+declarative way, which in my opinion is much better than my original Go approach.
+
+My first instinct when I started the assignment during the interview was
+to just make separate tables for all three entities: Businesses, Officers,
+and Roles. The problem with this was that it lost the context that the tuple
+of all three entities is also an important piece of data, and while merely
+finding the associations between the different entities may have been good enough
+for the prompt, losing this context meant any solution built on that couldn't scale
+any further because of loss of data.
+
+This new solution relies on four tables, loosely defined as follows:
 ```ruby
 class Business < ApplicationRecord
-  has_many :roles
+  has_many :associations
 end
 
 class Officer < ApplicationRecord
-  has_many :roles
+  has_many :associations
 end
 
-# Use Role as a virtual join table
 class Role < ApplicationRecord
-  validates :name, presence: true
+  has_many :associations
+end
+
+class Association < ApplicationRecord
   belongs_to :business
   belongs_to :officer
+  belongs_to :role
 end
 ```
 
-The idea is that since each row of the CSV is one unique relationship between
-the three entities in question, and the officers and businesses are ostensibly the
-more important data here, we can just use one join table between them that has
-the de-normalized role name on it. This does add some extra space cost for storing
-the same copy of a limited set of strings in multiple places, but the overall data
-structure is massively simplified. This also has the added benefit of simplifying the
-seed logic, because the call to `Role.find_or_create_by!(...)` doesn't fail on
-duplicate records.
+The idea here is that `Association` maintains the correlation between
+each datum in the original tuple, so we maintain the context of the data.
+It is a bit verbose, which is why the simpler approach of the `alternative`
+branch is likely better (3 tables rather than 4).
 
-To start up the server, do one of the following:
+I made controllers and views for all three entities, with links to navigate
+between them, since with this approach we basically get those links for free.
 
-Start via Rails cli:
+You can access the search route by loading the postman collection/environment
+in the project root, or like this:
+```bash
+curl http://localhost:3000/search?name=<OFFICER_NAME>&business=<BUSINESS_NAME>&role=<ROLE_NAME>
+```
+
+NB. All three query parameters here are optional
+
+Starting up the project can be done either through the rails cli like so:
 ```bash
 bin/rails db:create db:migrate db:seed
 bin/rails server
 ```
 
-Start via Makefile:
+...or by using the project's Makefile:
 ```bash
 make setup server
 ```
 
-I also included a Makefile target for doing a hard-delete of the database, in case
-you need it:
+Also I added an extra target to the Makefile to do a hard-delete of the
+database, in case you need it:
 ```bash
 make destroy-db
 ```
