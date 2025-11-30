@@ -11,16 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2025_11_29_193239) do
-  create_table "associations", id: false, force: :cascade do |t|
-    t.integer "business_id"
-    t.integer "officer_id"
-    t.integer "role_id"
-    t.index ["business_id", "officer_id", "role_id"], name: "index_associations_on_business_id_and_officer_id_and_role_id", unique: true
-    t.index ["business_id"], name: "index_associations_on_business_id"
-    t.index ["officer_id"], name: "index_associations_on_officer_id"
-    t.index ["role_id"], name: "index_associations_on_role_id"
-  end
-
   create_table "businesses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -34,12 +24,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_29_193239) do
   end
 
   create_table "roles", force: :cascade do |t|
+    t.integer "business_id"
     t.datetime "created_at", null: false
     t.string "name"
+    t.integer "officer_id"
     t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_roles_on_business_id"
+    t.index ["officer_id"], name: "index_roles_on_officer_id"
   end
-
-  add_foreign_key "associations", "businesses"
-  add_foreign_key "associations", "officers"
-  add_foreign_key "associations", "roles"
 end

@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/search?role=CEO",
+					"raw": "{{baseUrl}}/search?name=sv&business=zen&role=CEO",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -22,13 +22,11 @@
 					"query": [
 						{
 							"key": "name",
-							"value": "adr",
-							"disabled": true
+							"value": "sv"
 						},
 						{
 							"key": "business",
-							"value": "zen",
-							"disabled": true
+							"value": "zen"
 						},
 						{
 							"key": "role",

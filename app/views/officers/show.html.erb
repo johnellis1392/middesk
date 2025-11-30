@@ -1,21 +1,8 @@
 <h1><%= @officer.name %></h1>
 
 <h2>Businesses</h2>
-<% @officer.businesses.each do |business, roles| %>
+<% @officer.roles.each do |role| %>
   <p>
-    <%= link_to business.name, business %>
-    <span>
-      <%= "(#{roles*', '})" %>
-    </span>
-  </p>
-<% end %>
-
-<h2>Roles</h2>
-<% @officer.roles.each do |role, businesses| %>
-  <p>
-    <%= link_to role.name, role %>
-    <span>
-      <%= "(#{businesses*', '})" %>
-    </span>
+    <%= role.name %>, <%= role.business.name %>
   </p>
 <% end %>
