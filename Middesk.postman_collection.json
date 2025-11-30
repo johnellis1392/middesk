@@ -1,0 +1,43 @@
+{
+	"info": {
+		"_postman_id": "4de2d7f5-6c69-4540-9fb0-91018c981cb8",
+		"name": "Middesk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2353780"
+	},
+	"item": [
+		{
+			"name": "Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/search?role=CEO",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "adr",
+							"disabled": true
+						},
+						{
+							"key": "business",
+							"value": "zen",
+							"disabled": true
+						},
+						{
+							"key": "role",
+							"value": "CEO"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

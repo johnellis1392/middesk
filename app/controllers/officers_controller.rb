@@ -9,47 +9,36 @@ class OfficersController < ApplicationController
   end
 
   def search
-    name_filter = params[:name] || nil
-    business_filter = params[:business] || nil
-    role_filter = params[:role] || nil
+    name_filter = params[:name]
+    business_filter = params[:business]
+    role_filter = params[:role]
 
-    res = []
-    Officer.all.each do |officer|
-      if name_filter.nil? or officer.name.match? name_filter.upcase
-        roles = []
-        officer.roles.each do |role|
-          if role_filter.nil? or role.name.match? role_filter.upcase
-            business = nil
-            if business_filter.nil? or role.business.name.match? business_filter.upcase
-              business = {
-                business_id: role.business.id,
-                business_name: role.business.name,
-                # created_at: role.business.created_at,
-                # updated_at: role.business.updated_at
-              }
-            end
-            roles << {
-              role_id: role.id,
-              role_name: role.name,
-              business: business,
-              # created_at: role.created_at,
-              # updated_at: role.updated_at
-            }
-          end
-        end
-        unless roles.empty?
-          res << {
-            officer_id: officer.id,
-            officer_name: officer.name,
-            roles: roles,
-            # created_at: officer.created_at,
-            # updated_at: officer.updated_at
-          }
-        end
-      end
+    associations = Association.all.filter do |association|
+      (name_filter.nil? or association.officer.name.match? name_filter.upcase) and
+        (business_filter.nil? or association.business.name.match? business_filter.upcase) and
+        (role_filter.nil? or association.role.name.match? role_filter.upcase)
     end
 
-    render json: res, status: :ok
+    res = {}
+    associations.each do |association|
+      unless res.include? association.officer.id
+        res[association.officer.id] = {
+          officer_id: association.officer.id,
+          officer_name: association.officer.name,
+          roles: []
+        }
+      end
+      res[association.officer.id][:roles] << {
+        role_id: association.role.id,
+        role_name: association.role.name,
+        business: {
+          business_id: association.business.id,
+          business_name: association.business.name
+        }
+      }
+    end
+
+    render json: res
   end
 
   private

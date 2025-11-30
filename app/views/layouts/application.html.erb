@@ -24,11 +24,11 @@
   </head>
 
   <body>
-<!--    <nav style="font-size: 2rem; display: flex; justify-content: space-evenly">-->
-      <%#= link_to 'Businesses', controller: :businesses, action: :index %>
-      <%#= link_to 'Officers', controller: :officers, action: :index %>
-      <%#= link_to 'Roles', controller: :roles, action: :index %>
-<!--    </nav>-->
+    <nav style="font-size: 2rem; display: flex; justify-content: space-evenly">
+      <%= link_to 'Businesses', controller: :businesses, action: :index %>
+      <%= link_to 'Officers', controller: :officers, action: :index %>
+      <%= link_to 'Roles', controller: :roles, action: :index %>
+    </nav>
     <%= yield %>
   </body>
 </html>
